@@ -1,17 +1,19 @@
 from rich.table import Table
 from rich.console import Console
 from rich import print
-from calculo import somar, subtracao, multiplicacao, divisao, pedir_numeros, novos_numeros
-import sys
+from calculo import somar, subtracao, multiplicacao, divisao, pedir_numeros
 from time import sleep
 
-while True:
-    try:
-        n1, n2 = pedir_numeros()
-        break
-    except ValueError:
-        print(f'[bold yellow]Digite apenas números.[/]\n')
-        continue
+console = Console()
+
+def obter_numeros(mensagem):
+    while True:
+        try:
+            sleep(1)
+            return pedir_numeros(mensagem)
+        except ValueError:
+            print(f'[bold yellow]Digite apenas números.[/]')
+            continue
 
 def menu():
     tabela = Table(title='Menu da Calculadora')
@@ -28,14 +30,15 @@ def menu():
 
     console.print(tabela)
 
-console = Console()
-menu()
-sleep(0.5)
+n1, n2 = pedir_numeros('Digite os números iniciais')
+
 while True:
+    print(f'\nOs números atuais são {n1} e {n2}')
+    menu()
     opcao = input('Escolha uma opção: ')
     if opcao == '6':
         console.print(f'[bold green]Fim do programa[/]')
-        sys.exit()
+        break
     elif opcao == '1':
         print(f'A soma entre {n1} + {n2} = {somar(n1, n2)}')
     elif opcao == '2':
@@ -51,9 +54,9 @@ while True:
         while True:
             try:
                 sleep(1)
-                n1, n2 = novos_numeros()
+                n1, n2 = pedir_numeros('Digite os novos números')
                 sleep(1)
-                print(f'[bold green]Números atualizados[/]\n')
+                print(f'[bold green]Números atualizados...[/]\n')
                 break
             except ValueError:
                 print(f'[bold yellow]Digite apenas números.[/]')
