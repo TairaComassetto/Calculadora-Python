@@ -1,11 +1,13 @@
+from rich import print
 from rich.table import Table
 from rich.console import Console
-from rich import print
 from calculo import somar, subtracao, multiplicacao, divisao, pedir_numeros
 from time import sleep
 
 console = Console()
 
+console.print('[blue]Vamos calcular?[/]\n')
+sleep(1)
 def obter_numeros(mensagem):
     while True:
         try:
@@ -25,40 +27,67 @@ def menu():
     tabela.add_row('2', 'Subtrair')
     tabela.add_row('3', 'Multiplicar')
     tabela.add_row('4','Dividir')
-    tabela.add_row('5','Novos números')
-    tabela.add_row('6', 'Sair')
 
     console.print(tabela)
 
-n1, n2 = pedir_numeros('Digite os números iniciais')
+def menu_continuacao():
+    while True:
+        tabela = Table(title='O que deseja fazer agora')
+        tabela.add_column('Opção', justify='center')
+        tabela.add_column('Ação', justify='center')
+
+        tabela.add_row('1', 'Continuar com os mesmos números.')
+        tabela.add_row('2', 'Continuar MAS com novos números.')
+        tabela.add_row('3', 'Encerrar programa.')
+
+        print(tabela)
+
+        sleep(1)
+        escolha = input('Escolha um opção: ')
+
+        if escolha in ['1', '2', '3']:
+            return escolha
+
+        console.print('Opção Inválida!')
+
+n1, n2 = obter_numeros('Digite os números iniciais')
 
 while True:
-    print(f'\nOs números atuais são {n1} e {n2}')
+    console.print(f'\nOs números atuais são {n1} e {n2}\n')
+
+    sleep(0.8)
     menu()
+
     opcao = input('Escolha uma opção: ')
-    if opcao == '6':
-        console.print(f'[bold green]Fim do programa[/]')
-        break
-    elif opcao == '1':
-        print(f'A soma entre {n1} + {n2} = {somar(n1, n2)}')
+
+    sleep(1)
+    if opcao == '1':
+        console.print(f'A soma entre {n1} + {n2} = {somar(n1, n2)}\n')
     elif opcao == '2':
-        print(f'A subtração entre {n1} - {n2} = {subtracao(n1, n2)}')
+        console.print(f'A subtração entre {n1} - {n2} = {subtracao(n1, n2)}\n')
     elif opcao == '3':
-        print(f'A multiplicação entre {n1} x {n2} = {multiplicacao(n1, n2)}')
+        console.print(f'A multiplicação entre {n1} x {n2} = {multiplicacao(n1, n2)}\n')
     elif opcao == '4':
         if n2 == 0:
-            print('Não é possivel dividir por 0.')
+            print('Não é possivel dividir por zero.')
         else:
-            print(f'A divisão entre {n1} / {n2} = {divisao(n1, n2)}')
-    elif opcao == '5':
-        while True:
-            try:
-                sleep(1)
-                n1, n2 = pedir_numeros('Digite os novos números')
-                sleep(1)
-                print(f'[bold green]Números atualizados...[/]\n')
-                break
-            except ValueError:
-                print(f'[bold yellow]Digite apenas números.[/]')
+            console.print(f'A divisão entre {n1} / {n2} = {divisao(n1, n2)}\n')
     else:
         console.print(f'[bold red]Opção invalida! Digite novamente.[/]')
+        continue
+
+    escolha = menu_continuacao()
+
+    if escolha == '1':
+        continue
+
+    elif escolha == '2':
+        n1, n2 = obter_numeros('\nDigite os NOVOS números\n')
+        sleep(1)
+        console.print('\nNúmeros atualizados com sucesso!')
+        sleep(1)
+
+    elif escolha == '3':
+        console.print('\nFIM DO PROGRAMA!')
+        sleep(1.3)
+        break
