@@ -1,5 +1,4 @@
-def pedir_numeros(mensagem):
-    print(mensagem)
+def pedir_numeros():
     n1 = float(input('Digite um número: '))
     n2 = float(input('Digite outro número: '))
     return n1, n2
@@ -19,5 +18,5 @@ def multiplicacao(a,b):
 
 def divisao(a,b):
     if b == 0:
-        return 'Não é possivel dividir por zero!'
-    return a/b
+        return None
+    return a /b
