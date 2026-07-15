@@ -1,0 +1,21 @@
+# Ambiente virtual
+.venv/
+venv/
+
+# PyCharm
+.idea/
+
+# Arquivos compilados do Python
+__pycache__/
+*.py[cod]
+
+# Arquivos de cache
+.pytest_cache/
+.mypy_cache/
+
+# Variáveis de ambiente
+.env
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
