@@ -1,10 +1,11 @@
 from rich.table import Table
 from rich.console import Console
 from calculo import pedir_numeros, Operacoes
-from historico import adicionar, obter, limpar, nova_sessao
+from historico import Historico
 from utils import formatar_numero, pausa_curta, pausa_media, pausa_longa
 
 console = Console()
+historico = Historico()
 
 
 def obter_numeros(mensagem):
@@ -38,7 +39,7 @@ def menu():
 
 def exibir_historico():
     """Mostra todas as operações agrupadas por sessão."""
-    hist = obter()
+    hist = historico.obter()
     if not hist:
         console.print('\n[yellow]Histórico vazio.[/]\n')
         return
@@ -132,7 +133,7 @@ def main():
 
             operacao = f'{formatar_numero(n1)} {simbolo} {formatar_numero(n2)}'
             console.print(f'Resultado: {formatar_numero(n1)} {simbolo_exibicao} {formatar_numero(n2)} = {formatar_numero(resultado)}\n')
-            adicionar(operacao, formatar_numero(resultado), formatar_numero(n1), formatar_numero(n2))
+            historico.adicionar(operacao, formatar_numero(resultado), formatar_numero(n1), formatar_numero(n2))
 
         elif opcao == '5':
             exibir_historico()
@@ -141,7 +142,7 @@ def main():
 
         elif opcao == '6':
             if confirmar_limpeza():
-                limpar()
+                historico.limpar()
                 console.print('\n[yellow]Histórico apagado com sucesso![/]\n')
             else:
                 console.print('\n[dim]Operação cancelada.[/]\n')
@@ -163,7 +164,7 @@ def main():
             continue
 
         elif escolha == '2':
-            nova_sessao()
+            historico.sessao_nova()
             n1, n2 = obter_numeros('\nDigite os NOVOS números\n')
             pausa_media()
             console.print('\nNúmeros atualizados com sucesso!')
