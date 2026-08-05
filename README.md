@@ -80,7 +80,7 @@ Resultado: 10 + 5 = 15
 
 - [ ] Adicionar testes automatizados (`pytest`)
 - [ ] Persistir histórico em arquivo (JSON) entre execuções
-- [ ] Refatorar histórico para evitar estado global
+- [x] Refatorar histórico para evitar estado global
 - [ ] Adicionar suporte a mais operações (potência, raiz, etc.)
 
 ## Licença

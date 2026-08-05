@@ -24,6 +24,6 @@ class Historico:
         """Remove todas as operações do histórico."""
         self._historico.clear()
 
-    def sessao_nova(self):
+    def nova_sessao(self):
         """Inicia uma nova sessão de cálculos."""
         self._sessao_atual += 1

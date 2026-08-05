@@ -164,7 +164,7 @@ def main():
             continue
 
         elif escolha == '2':
-            historico.sessao_nova()
+            historico.nova_sessao()
             n1, n2 = obter_numeros('\nDigite os NOVOS números\n')
             pausa_media()
             console.print('\nNúmeros atualizados com sucesso!')
