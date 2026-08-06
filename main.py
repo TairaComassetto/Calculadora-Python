@@ -15,8 +15,8 @@ def obter_numeros(mensagem):
             pausa_media()
             console.print(mensagem)
             return pedir_numeros()
-        except ValueError:
-            console.print(f'[bold yellow]Digite apenas números.[/]')
+        except ValueError as erro:
+            console.print(f'[bold yellow]{erro}[/]')
             continue
 
 def menu():
