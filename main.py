@@ -7,6 +7,13 @@ from utils import formatar_numero, pausa_curta, pausa_media, pausa_longa
 console = Console()
 historico = Historico()
 
+opcao_historico = '5'
+opcao_limpar_historico = '6'
+opcao_sair = '7'
+
+continuar_mesmos_numeros = '1'
+continuar_novos_numeros = '2'
+encerrar_programa = '3'
 
 def obter_numeros(mensagem):
     """Solicita dois números válidos ao usuário."""
@@ -102,7 +109,7 @@ def menu_continuacao():
         pausa_media()
         escolha = input('Escolha um opção: ')
 
-        if escolha in ['1', '2', '3']:
+        if escolha in [continuar_mesmos_numeros, continuar_novos_numeros, encerrar_programa]:
             return escolha
 
         console.print('Opção Inválida!')
@@ -135,12 +142,12 @@ def main():
             console.print(f'Resultado: {formatar_numero(n1)} {simbolo_exibicao} {formatar_numero(n2)} = {formatar_numero(resultado)}\n')
             historico.adicionar(operacao, formatar_numero(resultado), formatar_numero(n1), formatar_numero(n2))
 
-        elif opcao == '5':
+        elif opcao == opcao_historico:
             exibir_historico()
             pausa_longa()
             continue
 
-        elif opcao == '6':
+        elif opcao == opcao_limpar_historico:
             if confirmar_limpeza():
                 historico.limpar()
                 console.print('\n[yellow]Histórico apagado com sucesso![/]\n')
@@ -148,7 +155,7 @@ def main():
                 console.print('\n[dim]Operação cancelada.[/]\n')
                 pausa_media()
                 continue
-        elif opcao == '7':
+        elif opcao == opcao_sair:
             console.print('[red]Saindo do sistema[/]')
             pausa_media()
             break
@@ -160,17 +167,17 @@ def main():
         pausa_media()
         escolha = menu_continuacao()
 
-        if escolha == '1':
+        if escolha == continuar_mesmos_numeros:
             continue
 
-        elif escolha == '2':
+        elif escolha == continuar_novos_numeros:
             historico.nova_sessao()
             n1, n2 = obter_numeros('\nDigite os NOVOS números\n')
             pausa_media()
             console.print('\nNúmeros atualizados com sucesso!')
             pausa_media()
 
-        elif escolha == '3':
+        elif escolha == encerrar_programa:
             console.print('\nFIM DO PROGRAMA!')
             pausa_longa()
             break
