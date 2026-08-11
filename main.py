@@ -15,7 +15,7 @@ continuar_mesmos_numeros = '1'
 continuar_novos_numeros = '2'
 encerrar_programa = '3'
 
-def obter_numeros(mensagem):
+def obter_numeros(mensagem: str) -> tuple[float, float]:
     """Solicita dois números válidos ao usuário."""
     while True:
         try:
@@ -26,7 +26,7 @@ def obter_numeros(mensagem):
             console.print(f'[bold yellow]{erro}[/]')
             continue
 
-def menu():
+def menu() -> None:
     """Exibe o menu principal da calculadora."""
     tabela = Table(title='Menu da Calculadora')
 
@@ -44,7 +44,7 @@ def menu():
 
     console.print(tabela)
 
-def exibir_historico():
+def exibir_historico() -> None:
     """Mostra todas as operações agrupadas por sessão."""
     hist = historico.obter()
     if not hist:
@@ -82,7 +82,7 @@ def exibir_historico():
         console.print()
 
 
-def confirmar_limpeza():
+def confirmar_limpeza() -> bool:
     """Pergunta ao usuário se deseja apagar o histórico."""
     while True:
         resposta = input('\nTem certeza que quer apagar o histórico? (s/n): ').strip().lower()
@@ -93,7 +93,7 @@ def confirmar_limpeza():
         else:
             console.print('[red]Opção inválida! Digite novamente.[/]')
 
-def menu_continuacao():
+def menu_continuacao() -> str:
     """Exibe as opções após a realização de uma operação."""
     while True:
         tabela = Table(title='[bold]O que deseja fazer agora[/]')
@@ -114,7 +114,7 @@ def menu_continuacao():
 
         console.print('Opção Inválida!')
 
-def main():
+def main() -> None:
     """Controla o fluxo principal da aplicação."""
     console.print('[blue]Vamos calcular?[/]\n')
     pausa_media()
