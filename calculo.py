@@ -17,12 +17,15 @@ def validar_numero(texto: str) -> float:
 
     return valor
 
-def pedir_numeros() -> tuple[float, float]:
-    """Solicita dois números ao usuário e retorna ambos."""
-    n1 = validar_numero(input('Digite um número: '))
-    n2 = validar_numero(input('Digite outro número: '))
-    return n1, n2
+def pedir_numeros(perguntas: list[str]) -> tuple[float, ...]:
+    """Faz uma pergunta especifica para cada número necessário e retorna todos."""
+    numeros = []
+    for pergunta in perguntas:
+        numeros.append((validar_numero(input(f'{pergunta}: '))))
+    return tuple(numeros)
 
+
+# --- Operações ---
 
 def somar(a: float, b: float) -> float:
     """Retorna a soma entre dois números."""
@@ -45,9 +48,31 @@ def divisao(a: float, b: float) -> float | None:
         return None
     return a / b
 
+
+def potencia(a: float, b: float) -> float:
+    """Retorna 'a' elevado a 'b'."""
+    return a ** b
+
+
+def raiz_quadrada(a: float) -> float | None:
+    """Retorna a raiz quadrada de 'a', ou None se 'a' for negativo."""
+    if a < 0:
+        return None
+    return math.sqrt(a)
+
+
+def porcentagem(a: float, b: float) -> float:
+    """Calcula quanto é 'a' por cento de 'b'."""
+    return (a / 100) * b
+
+
+# Cada entrada: (função, perguntas (uma por número necessário), símbolo_interno, símbolo_exibição)
 Operacoes = {
-    '1': (somar, '+', '+'),
-    '2': (subtracao, '-', '-'),
-    '3': (multiplicacao, '*', 'x'),
-    '4': (divisao, '/', '/'),
+    '1': (somar,          ['Qual é o primeiro número?', 'E o segundo?'],                  '+',    '+'),
+    '2': (subtracao,      ['Qual número você quer subtrair?', 'E de qual número?'],        '-',    '-'),
+    '3': (multiplicacao,  ['Qual é o primeiro número?', 'E o segundo?'],                  '*',    'x'),
+    '4': (divisao,        ['Qual número você quer dividir?', 'E por qual número?'],        '/',    '/'),
+    '5': (potencia,       ['Qual é a base?', 'E o expoente?'],                            '**',   '^'),
+    '6': (raiz_quadrada,  ['De qual número você quer a raiz quadrada?'],                  'sqrt', '√'),
+    '7': (porcentagem,    ['Quantos por cento você quer calcular?', 'De qual valor?'],     '%',    '% de'),
 }

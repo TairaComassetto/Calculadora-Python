@@ -7,24 +7,9 @@ from utils import formatar_numero, pausa_curta, pausa_media, pausa_longa
 console = Console()
 historico = Historico()
 
-opcao_historico = '5'
-opcao_limpar_historico = '6'
-opcao_sair = '7'
-
-continuar_mesmos_numeros = '1'
-continuar_novos_numeros = '2'
-encerrar_programa = '3'
-
-def obter_numeros(mensagem: str) -> tuple[float, float]:
-    """Solicita dois números válidos ao usuário."""
-    while True:
-        try:
-            pausa_media()
-            console.print(mensagem)
-            return pedir_numeros()
-        except ValueError as erro:
-            console.print(f'[bold yellow]{erro}[/]')
-            continue
+opcao_historico = '8'
+opcao_limpar_historico = '9'
+opcao_sair = '0'
 
 def menu() -> None:
     """Exibe o menu principal da calculadora."""
@@ -37,12 +22,49 @@ def menu() -> None:
     tabela.add_row('2', 'Subtrair')
     tabela.add_row('3', 'Multiplicar')
     tabela.add_row('4', 'Dividir')
-    tabela.add_row('5', 'Ver Histórico')
-    tabela.add_row('6', 'Limpar Histórico')
-    tabela.add_row('7', 'Sair')
+    tabela.add_row('5', 'Potência')
+    tabela.add_row('6', 'Raiz Quadrada')
+    tabela.add_row('7', 'Porcentagem')
+    tabela.add_row('8', 'Ver Histórico')
+    tabela.add_row('9', 'Limpar Histórico')
+    tabela.add_row('0', 'Sair')
 
 
     console.print(tabela)
+
+
+def obter_numeros_da_operacao(perguntas: list[str]) -> tuple[float, ...]:
+    """Solicita dois números válidos ao usuário."""
+    while True:
+        try:
+            pausa_media()
+            return pedir_numeros(perguntas)
+        except ValueError as erro:
+            console.print(f'[bold yellow]{erro}[/]')
+
+def executar_operacao(opcao: str) -> None:
+    """Pede os números certos, executa a operação e trata o resultado/erro."""
+    func, perguntas, simbolo, simbolo_exibicao = Operacoes[opcao]
+
+    numeros = obter_numeros_da_operacao(perguntas)
+    resultado = func(*numeros)
+
+    if resultado is None:
+        console.print('[red]Operação inválida para esses valores (ex: divisão por zero ou raiz de número negativo).[/]')
+        pausa_media()
+        return
+
+    numeros_fmt =[formatar_numero(n) for n in numeros]
+
+    if len(numeros) == 1:
+        operacao_str = f'{simbolo_exibicao}({numeros_fmt[0]})'
+    else:
+        operacao_str = f' {simbolo_exibicao} '.join(str(n) for n in numeros_fmt)
+
+    console.print(f'Resultado: {operacao_str} = {formatar_numero(resultado)}\n')
+    historico.adicionar(operacao_str, formatar_numero(resultado), tuple(numeros_fmt))
+    pausa_media()
+
 
 def exibir_historico() -> None:
     """Mostra todas as operações agrupadas por sessão."""
@@ -51,35 +73,16 @@ def exibir_historico() -> None:
         console.print('\n[yellow]Histórico vazio.[/]\n')
         return
 
-    # Agrupa as operações que utilizaram os mesmos números.
-    grupos = []
-    for item in hist:
-        # Caso a sessão já exista, adiciona a operação nela.
-        if grupos and grupos[-1]['sessao'] == item['sessao']:
-            grupos[-1]['itens'].append(item)
-        else:
-            grupos.append({
-                'sessao': item['sessao'],
-                'numeros': item['numeros'],
-                'itens': [item]
-            })
+    tabela = Table(title='[bold]Histórico de Cálculos[/]', border_style='green')
+    tabela.add_column('#', justify='center', style='dim')
+    tabela.add_column('Operação', justify='center')
+    tabela.add_column('Resultado', justify='center', style='bold green')
 
-    for grupo in grupos:
-        n1, n2 = grupo['numeros']
-        # Cria uma tabela para cada sessão de cálculos.
-        tabela = Table(
-            title=f'[bold]Cálculos com {n1} e {n2}[/]',
-            border_style='green'
-        )
-        tabela.add_column('#', justify='center', style='dim')
-        tabela.add_column('Operação', justify='center')
-        tabela.add_column('Resultado', justify='center', style='bold green')
+    for i, item in enumerate(hist, 1):
+        tabela.add_row(str(i), item['operacao'], str(item['resultado']))
 
-        for i, item in enumerate(grupo['itens'], 1):
-            tabela.add_row(str(i), item['operacao'], str(item['resultado']))
-
-        console.print(tabela)
-        console.print()
+    console.print(tabela)
+    console.print()
 
 
 def confirmar_limpeza() -> bool:
@@ -93,93 +96,42 @@ def confirmar_limpeza() -> bool:
         else:
             console.print('[red]Opção inválida! Digite novamente.[/]')
 
-def menu_continuacao() -> str:
-    """Exibe as opções após a realização de uma operação."""
-    while True:
-        tabela = Table(title='[bold]O que deseja fazer agora[/]')
-        tabela.add_column('Opção', justify='center', style='green')
-        tabela.add_column('Ação', justify='center', style='blue')
-
-        tabela.add_row('1', 'Continuar com os mesmos números.')
-        tabela.add_row('2', 'Continuar, MAS com novos números.')
-        tabela.add_row('3', 'Encerrar programa.')
-
-        console.print(tabela)
-
-        pausa_media()
-        escolha = input('Escolha um opção: ')
-
-        if escolha in [continuar_mesmos_numeros, continuar_novos_numeros, encerrar_programa]:
-            return escolha
-
-        console.print('Opção Inválida!')
 
 def main() -> None:
     """Controla o fluxo principal da aplicação."""
     console.print('[blue]Vamos calcular?[/]\n')
-    pausa_media()
-    n1, n2 = obter_numeros('Digite os números iniciais')
 
     while True:
-        console.print(f'\nOs números atuais são {formatar_numero(n1)} e {formatar_numero(n2)}\n')
-
         pausa_curta()
         menu()
 
-        opcao = input('Escolha uma opção: ')
-
+        opcao = input('Escolha uma opção: ').strip()
         pausa_media()
+
         if opcao in Operacoes:
-            func, simbolo, simbolo_exibicao = Operacoes[opcao]
-            resultado = func(n1, n2)
-
-            if resultado is None:
-                console.print('[red]Não é possível dividir por zero[/]')
-                pausa_media()
-                continue
-
-            operacao = f'{formatar_numero(n1)} {simbolo} {formatar_numero(n2)}'
-            console.print(f'Resultado: {formatar_numero(n1)} {simbolo_exibicao} {formatar_numero(n2)} = {formatar_numero(resultado)}\n')
-            historico.adicionar(operacao, formatar_numero(resultado), formatar_numero(n1), formatar_numero(n2))
+            executar_operacao(opcao)
 
         elif opcao == opcao_historico:
             exibir_historico()
             pausa_longa()
-            continue
 
         elif opcao == opcao_limpar_historico:
             if confirmar_limpeza():
                 historico.limpar()
-                console.print('\n[yellow]Histórico apagado com sucesso![/]\n')
+                console.print('[yellow]Histórico apagado com sucesso.[/]')
             else:
-                console.print('\n[dim]Operação cancelada.[/]\n')
-                pausa_media()
-                continue
+                console.print('[dim]Operação cancelada.[/]')
+            pausa_media()
+
         elif opcao == opcao_sair:
-            console.print('[red]Saindo do sistema[/]')
+            console.print('[red]Saindo do sistema.[/]')
             pausa_media()
             break
+
         else:
-            console.print(f'[bold red]Opção invalida! Digite novamente.[/]')
-            pausa_media()
-            continue
-
-        pausa_media()
-        escolha = menu_continuacao()
-
-        if escolha == continuar_mesmos_numeros:
-            continue
-
-        elif escolha == continuar_novos_numeros:
-            historico.nova_sessao()
-            n1, n2 = obter_numeros('\nDigite os NOVOS números\n')
-            pausa_media()
-            console.print('\nNúmeros atualizados com sucesso!')
+            console.print('[bold red]Opção inválida! Digite novamente.[/]')
             pausa_media()
 
-        elif escolha == encerrar_programa:
-            console.print('\nFIM DO PROGRAMA!')
-            pausa_longa()
-            break
+
 if __name__ == '__main__':
     main()
