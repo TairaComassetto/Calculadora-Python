@@ -42,24 +42,22 @@ def multiplicacao(a: float, b: float) -> float:
     return a * b
 
 
-def divisao(a: float, b: float) -> float | None:
-    """Retorna a divisão entre dois números ou None caso o divisor seja zero."""
+def divisao(a: float, b: float) -> float:
+    """Retorna a divisão entre dois números. Lança ZeroDivisionError se o divisor for zero."""
     if b == 0:
-        return None
+        raise ZeroDivisionError('Não é possível dividir por zero.')
     return a / b
-
 
 def potencia(a: float, b: float) -> float:
     """Retorna 'a' elevado a 'b'."""
     return a ** b
 
 
-def raiz_quadrada(a: float) -> float | None:
-    """Retorna a raiz quadrada de 'a', ou None se 'a' for negativo."""
+def raiz_quadrada(a: float) -> float:
+    """Retorna a raiz quadrada de 'a'. Lança ValueError se 'a' for negativo."""
     if a < 0:
-        return None
+        raise ValueError('Não é possível calcular a raiz de um número negativo.')
     return math.sqrt(a)
-
 
 def porcentagem(a: float, b: float) -> float:
     """Calcula quanto é 'a' por cento de 'b'."""
@@ -67,7 +65,7 @@ def porcentagem(a: float, b: float) -> float:
 
 
 # Cada entrada: (função, perguntas (uma por número necessário), símbolo_interno, símbolo_exibição)
-Operacoes = {
+OPERACOES = {
     '1': (somar,          ['Qual é o primeiro número?', 'E o segundo?'],                  '+',    '+'),
     '2': (subtracao,      ['Qual número você quer subtrair?', 'E de qual número?'],        '-',    '-'),
     '3': (multiplicacao,  ['Qual é o primeiro número?', 'E o segundo?'],                  '*',    'x'),
