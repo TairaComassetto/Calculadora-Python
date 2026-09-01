@@ -6,12 +6,12 @@ class Historico:
     def __init__(self) -> None:
         self._historico: list[dict] = []
 
-    def adicionar(self, operacao: str, resultado: float | None, numeros: tuple[float, ...]) -> None:
-        """Adiciona uma operação ao histórico"""
+    def adicionar(self, simbolo: str, numeros: tuple[float, ...], resultado: float) -> None:
+        """Adiciona uma operação ao histórico, guardando os dados brutos (sem formatação)."""
         self._historico.append({
-            'operacao': operacao,
+            'simbolo': simbolo,
+            'numeros': numeros,
             'resultado': resultado,
-            'numeros': numeros
         })
 
     def obter(self) -> list[dict]:
