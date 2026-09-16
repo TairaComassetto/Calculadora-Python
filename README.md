@@ -5,10 +5,11 @@ Uma calculadora de terminal (CLI) feita em Python, com interface colorida usando
 ## Funcionalidades
 
 - Operações: soma, subtração, multiplicação, divisão, potência, raiz quadrada e porcentagem
-- Tratamento de erros (divisão por zero, raiz de número negativo, entrada inválida)
+- Tratamento de erros (divisão por zero, raiz de número negativo, entrada inválida, resultado fora de faixa)
 - Cada operação pergunta os números de forma específica, uma pergunta por vez (ex: "Qual é a base?", "E o expoente?")
 - Histórico de todos os cálculos feitos na sessão
 - Interface em terminal com tabelas e cores (via `rich`)
+- Encerramento tratado com Ctrl+C, sem exibir erros
 
 ## Como instalar
 
@@ -39,13 +40,19 @@ python main.py
 ## Estrutura do projeto
 
 ```
-├── main.py         # Fluxo principal e interface com o usuário
-├── calculo.py      # Lógica das operações matemáticas
+├── main.py         # Interface de terminal (toda a entrada e saída de dados)
+├── calculo.py      # Lógica matemática pura, sem entrada/saída
 ├── historico.py    # Armazenamento do histórico de cálculos
 ├── utils.py        # Funções auxiliares (formatação, pausas)
 ├── requirements.txt
 └── README.md
 ```
+
+### Arquitetura
+
+O projeto separa a lógica da interface. `calculo.py` não lê do teclado nem imprime na tela: recebe números, devolve números e levanta exceções. Quem cuida das perguntas, das mensagens e da apresentação é o `main.py`.
+
+Essa separação facilita testar os cálculos sem simular entrada do usuário, e permite reaproveitar `calculo.py` e `historico.py` numa futura interface gráfica sem alteração alguma.
 
 ## Menu
 
@@ -85,10 +92,13 @@ Resultado: √(16) = 4
 ## Melhorias futuras
 
 - [ ] Adicionar testes automatizados (`pytest`)
+- [ ] Integração contínua com GitHub Actions
 - [ ] Persistir histórico em arquivo (JSON) entre execuções
+- [ ] Interface gráfica com Tkinter, reaproveitando a camada de cálculo
+- [x] Separar a lógica de cálculo da interface de usuário
 - [x] Refatorar histórico para evitar estado global
 - [x] Adicionar suporte a mais operações (potência, raiz, porcentagem)
 
 ## Licença
 
-Este projeto está sob a licença MIT.
+Este projeto está sob a licença [MIT](LICENSE).
