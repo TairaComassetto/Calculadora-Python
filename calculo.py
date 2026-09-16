@@ -1,4 +1,6 @@
 import math
+from collections.abc import Callable
+from dataclasses import dataclass
 
 def validar_numero(texto: str) -> float:
     """Converte um texto em número, validando o formato."""
@@ -16,14 +18,6 @@ def validar_numero(texto: str) -> float:
         raise ValueError('O valor digitado não é um número válido.')
 
     return valor
-
-def pedir_numeros(perguntas: list[str]) -> tuple[float, ...]:
-    """Faz uma pergunta especifica para cada número necessário e retorna todos."""
-    numeros = []
-    for pergunta in perguntas:
-        numeros.append((validar_numero(input(f'{pergunta}: '))))
-    return tuple(numeros)
-
 
 # --- Operações ---
 
@@ -78,14 +72,23 @@ def porcentagem(a: float, b: float) -> float:
     """Calcula quanto é 'a' por cento de 'b'."""
     return (a / 100) * b
 
+# --- Catálogo de operações ---
 
-# Cada entrada: (função, perguntas (uma por número necessário), símbolo_interno, símbolo_exibição)
-OPERACOES = {
-    '1': (somar,          ['Qual é o primeiro número?', 'E o segundo?'],                  '+',    '+'),
-    '2': (subtracao,      ['Qual número você quer subtrair?', 'E de qual número?'],        '-',    '-'),
-    '3': (multiplicacao,  ['Qual é o primeiro número?', 'E o segundo?'],                  '*',    'x'),
-    '4': (divisao,        ['Qual número você quer dividir?', 'E por qual número?'],        '/',    '/'),
-    '5': (potencia,       ['Qual é a base?', 'E o expoente?'],                            '**',   '^'),
-    '6': (raiz_quadrada,  ['De qual número você quer a raiz quadrada?'],                  'sqrt', '√'),
-    '7': (porcentagem,    ['Quantos por cento você quer calcular?', 'De qual valor?'],     '%',    '% de'),
+@dataclass(frozen=True)
+class Operacao:
+    """Descreve uma operação disponível na calculadora."""
+
+    nome: str
+    funcao: Callable[..., float]
+    simbolo: str
+    ariedade: int
+
+OPERACOES: dict[str, Operacao] = {
+    '1': Operacao('Somar', somar, '+', 2),
+    '2': Operacao('Subtrair', subtracao, '-', 2),
+    '3': Operacao('Multiplicar', multiplicacao, 'x', 2),
+    '4': Operacao('Dividir', divisao, '/', 2),
+    '5': Operacao('Potência', potencia, '^', 2),
+    '6': Operacao('Raiz Quadrada', raiz_quadrada, '√', 1),
+    '7': Operacao('Porcentagem', porcentagem, '% de', 2),
 }

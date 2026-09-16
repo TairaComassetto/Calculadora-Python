@@ -1,6 +1,13 @@
+"""Interface de terminal da calculadora.
+
+Toda a entrada e saída de dados vive aqui. A lógica matemática está em
+cálculo.py e o armazenamento em histórico.py.
+"""
+
 from rich.table import Table
 from rich.console import Console
-from calculo import pedir_numeros, OPERACOES
+
+from calculo import OPERACOES, Operacao, validar_numero
 from historico import Historico
 from utils import formatar_numero,formatar_operacao, pausa_curta, pausa_media, pausa_longa
 
@@ -29,35 +36,36 @@ def menu() -> None:
     tabela.add_column("Opção", justify="center", style='cyan')
     tabela.add_column("Operação", justify="center", style='green')
 
-    tabela.add_row('1', 'Somar',)
-    tabela.add_row('2', 'Subtrair')
-    tabela.add_row('3', 'Multiplicar')
-    tabela.add_row('4', 'Dividir')
-    tabela.add_row('5', 'Potência')
-    tabela.add_row('6', 'Raiz Quadrada')
-    tabela.add_row('7', 'Porcentagem')
-    tabela.add_row('8', 'Ver Histórico')
-    tabela.add_row('9', 'Limpar Histórico')
-    tabela.add_row('0', 'Sair')
+    for codigo, operacao in OPERACOES.items():
+        tabela.add_row(codigo, operacao.nome)
 
+    tabela.add_row(OPCAO_HISTORICO, 'Ver Histórico')
+    tabela.add_row(OPCAO_LIMPAR_HISTORICO, 'Limpar Histórico')
+    tabela.add_row(OPCAO_SAIR, 'Sair')
 
     console.print(tabela)
 
 
-def obter_numeros_da_operacao(perguntas: list[str]) -> tuple[float, ...]:
-    """Solicita dois números válidos ao usuário."""
-    while True:
-        try:
-            pausa_media()
-            return pedir_numeros(perguntas)
-        except ValueError as erro:
-            console.print(f'[bold yellow]{erro}[/]')
+def pedir_numeros(perguntas: list[str]) -> tuple[float, ...]:
+    """Faz uma pergunta por número necessário e devolve todos já validados."""
+    numeros: list[float] = []
+
+    for pergunta in perguntas:
+        while True:
+            try:
+                numeros.append(validar_numero(input(f'{pergunta}: ')))
+                break
+            except ValueError as erro:
+                console.print(f'[bold yellow]{erro}[/]')
+    return tuple(numeros)
+
 
 def executar_operacao(opcao: str) -> None:
-    """Pede os números certos, executa a operação e trata o resultado/erro."""
-    func, perguntas, simbolo, simbolo_exibicao = OPERACOES[opcao]
+    """Pede os números, executa a operação e trata o resultado ou o erro."""
+    operacao: Operacao = OPERACOES[opcao]
 
-    numeros = obter_numeros_da_operacao(perguntas)
+    pausa()
+    numeros = pedir_numeros(PERGUNTAS[opcao])
 
     try:
         resultado = operacao.funcao(*numeros)
@@ -66,15 +74,16 @@ def executar_operacao(opcao: str) -> None:
         pausa_media()
         return
 
-    operacao_str = formatar_operacao(simbolo_exibicao, numeros)
+    operacao_str = formatar_operacao(operacao.simbolo, numeros)
     console.print(f'Resultado: {operacao_str} = {formatar_numero(resultado)}\n')
 
-    historico.adicionar(simbolo_exibicao, numeros, resultado)
-    pausa_media()
+    historico.adicionar(operacao.simbolo, numeros, resultado)
+    pausa()
 
 def exibir_historico() -> None:
-    """Mostra todas as operações agrupadas por sessão."""
+    """Mostra todas as operações da sessão."""
     hist = historico.obter()
+
     if not hist:
         console.print('\n[yellow]Histórico vazio.[/]\n')
         return
@@ -96,18 +105,20 @@ def exibir_historico() -> None:
 def confirmar_limpeza() -> bool:
     """Pergunta ao usuário se deseja apagar o histórico."""
     while True:
-        resposta = input('\nTem certeza que quer apagar o histórico? (s/n): ').strip().lower()
+        resposta = input('\nTem certeza que quer apagar o histórico? (s/n): ')
+        resposta = resposta.strip().lower()
+
         if resposta in ('s', 'sim'):
             return True
-        elif resposta in ('n', 'nao', 'não'):
+        if resposta in ('n', 'nao', 'não'):
             return False
-        else:
-            console.print('[red]Opção inválida! Digite novamente.[/]')
+
+        console.print('[red]Opção inválida! Digite novamente.[/]')
 
 
-def main() -> None:
-    """Controla o fluxo principal da aplicação."""
-    console.print('[blue]Vamos calcular?[/]\n')
+def loop_principal():
+    """Controla o fluxo da aplicação."""
+    console.print(('[blue]Vamos calcular[/]\n'))
 
     while True:
         pausa_curta()
