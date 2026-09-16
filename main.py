@@ -29,6 +29,28 @@ PERGUNTAS: dict[str, list[str]] = {
     '7': ['Quantos por cento você quer calcular?', 'De qual valor?'],
 }
 
+
+def validar_consistencia_operacoes() -> None:
+    """Garante que a quantidade de perguntas bate com a ariedade de cada operação.
+
+    A ariedade em Operacao é a fonte da verdade sobre quantos números uma
+    operação precisa. Essa checagem impede que PERGUNTAS fique dessincronizado
+    dela -- por exemplo, ao adicionar uma operação nova e esquecer de ajustar
+    um dos dois lugares.
+    """
+    for codigo, operacao in OPERACOES.items():
+        quantidade_perguntas = len(PERGUNTAS[codigo])
+        if quantidade_perguntas != operacao.ariedade:
+            raise AssertionError(
+                f"Operação '{operacao.nome}' (código {codigo}) tem ariedade "
+                f'{operacao.ariedade}, mas PERGUNTAS[{codigo!r}] tem '
+                f'{quantidade_perguntas} pergunta(s).'
+            )
+
+
+validar_consistencia_operacoes()
+
+
 def menu() -> None:
     """Exibe o menu principal da calculadora."""
     tabela = Table(title='Menu da Calculadora')
