@@ -33,7 +33,7 @@ def somar(a: float, b: float) -> float:
 
 
 def subtracao(a: float, b: float) -> float:
-    """Retorna a subtração entre dois números."""
+    """Retorna 'a' menos 'b'."""
     return a - b
 
 
@@ -49,8 +49,23 @@ def divisao(a: float, b: float) -> float:
     return a / b
 
 def potencia(a: float, b: float) -> float:
-    """Retorna 'a' elevado a 'b'."""
-    return a ** b
+    """Retorna 'a' elevado a 'b'.
+
+    Lança ValueError se o resultado não for um número real ou se for
+    grande demais para ser representado.
+    """
+    if a < 0 and b != int(b):
+        raise ValueError('Não é possível elevar um número negativo a um expoente fracionário.')
+
+    try:
+        resultado = a ** b
+    except OverflowError as erro:
+        raise ValueError('O resultado é grande demais para ser calculado.') from erro
+
+    if math.isinf(resultado):
+        raise ValueError('O resultado é grande demais para ser calculado.')
+
+    return float(resultado)
 
 
 def raiz_quadrada(a: float) -> float:

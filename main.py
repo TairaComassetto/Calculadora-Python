@@ -11,6 +11,17 @@ OPCAO_HISTORICO = '8'
 OPCAO_LIMPAR_HISTORICO = '9'
 OPCAO_SAIR = '0'
 
+# Textos de interface: pertencem a esta camada, não ao módulo de cálculo.
+PERGUNTAS: dict[str, list[str]] = {
+    '1': ['Qual é o primeiro número?', 'E o segundo?'],
+    '2': ['De qual número você quer subtrair?', 'Quanto você quer subtrair?'],
+    '3': ['Qual é o primeiro número?', 'E o segundo?'],
+    '4': ['Qual número você quer dividir?', 'E por qual número?'],
+    '5': ['Qual é a base?', 'E o expoente?'],
+    '6': ['De qual número você quer a raiz quadrada?'],
+    '7': ['Quantos por cento você quer calcular?', 'De qual valor?'],
+}
+
 def menu() -> None:
     """Exibe o menu principal da calculadora."""
     tabela = Table(title='Menu da Calculadora')
@@ -49,8 +60,8 @@ def executar_operacao(opcao: str) -> None:
     numeros = obter_numeros_da_operacao(perguntas)
 
     try:
-        resultado = func(*numeros)
-    except (ZeroDivisionError, ValueError) as erro:
+        resultado = operacao.funcao(*numeros)
+    except (ZeroDivisionError, ValueError, OverflowError) as erro:
         console.print(f'[bold red]{erro}[/]')
         pausa_media()
         return
