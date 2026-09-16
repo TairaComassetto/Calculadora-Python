@@ -9,7 +9,7 @@ from rich.console import Console
 
 from calculo import OPERACOES, Operacao, validar_numero
 from historico import Historico
-from utils import formatar_numero,formatar_operacao, pausa_curta, pausa_media, pausa_longa
+from utils import formatar_numero, formatar_operacao, pausa
 
 console = Console()
 historico = Historico()
@@ -71,7 +71,7 @@ def executar_operacao(opcao: str) -> None:
         resultado = operacao.funcao(*numeros)
     except (ZeroDivisionError, ValueError, OverflowError) as erro:
         console.print(f'[bold red]{erro}[/]')
-        pausa_media()
+        pausa()
         return
 
     operacao_str = formatar_operacao(operacao.simbolo, numeros)
@@ -121,18 +121,18 @@ def loop_principal():
     console.print(('[blue]Vamos calcular[/]\n'))
 
     while True:
-        pausa_curta()
+        pausa()
         menu()
 
-        opcao = input('Escolha uma opção: ').strip()
-        pausa_media()
+        opcao = input(('Escolha uma opção: ')).strip()
+        pausa()
 
         if opcao in OPERACOES:
             executar_operacao(opcao)
 
         elif opcao == OPCAO_HISTORICO:
             exibir_historico()
-            pausa_longa()
+            pausa(0.5)
 
         elif opcao == OPCAO_LIMPAR_HISTORICO:
             if confirmar_limpeza():
@@ -140,17 +140,23 @@ def loop_principal():
                 console.print('[yellow]Histórico apagado com sucesso.[/]')
             else:
                 console.print('[dim]Operação cancelada.[/]')
-            pausa_media()
+            pausa()
 
         elif opcao == OPCAO_SAIR:
             console.print('[red]Saindo do sistema.[/]')
-            pausa_media()
+            pausa()
             break
 
         else:
             console.print('[bold red]Opção inválida! Digite novamente.[/]')
-            pausa_media()
+            pausa()
 
+def main() -> None:
+    """Ponto de entrada: executa a calculadora e encerra com elegância."""
+    try:
+        loop_principal()
+    except (KeyboardInterrupt, EOFError):
+        console.print('\n[red]Encerrado pelo usuário.[/]')
 
 if __name__ == '__main__':
     main()

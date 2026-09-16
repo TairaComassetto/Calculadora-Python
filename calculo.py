@@ -11,8 +11,8 @@ def validar_numero(texto: str) -> float:
 
     try:
         valor = float(texto)
-    except ValueError:
-        raise ValueError(f'"{texto}" não é um número válido.')
+    except ValueError as erro:
+        raise ValueError(f'"{texto}" não é um número válido.') from erro
 
     if math.isnan(valor) or math.isinf(valor):
         raise ValueError('O valor digitado não é um número válido.')
@@ -65,7 +65,7 @@ def potencia(a: float, b: float) -> float:
 def raiz_quadrada(a: float) -> float:
     """Retorna a raiz quadrada de 'a'. Lança ValueError se 'a' for negativo."""
     if a < 0:
-        raise ValueError('Não é possível calcular a raiz de um número negativo.')
+        raise ValueError('Não é possivel calcular a raiz quadrada de um número negativo.')
     return math.sqrt(a)
 
 def porcentagem(a: float, b: float) -> float:
