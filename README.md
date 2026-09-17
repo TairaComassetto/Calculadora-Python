@@ -37,14 +37,28 @@ Uma calculadora de terminal (CLI) feita em Python, com interface colorida usando
 python main.py
 ```
 
+## Como rodar os testes
+
+```bash
+pip install -r requirements-dev.txt
+pytest -v
+```
+
 ## Estrutura do projeto
 
 ```
-├── main.py         # Interface de terminal (toda a entrada e saída de dados)
-├── calculo.py      # Lógica matemática pura, sem entrada/saída
-├── historico.py    # Armazenamento do histórico de cálculos
-├── utils.py        # Funções auxiliares (formatação, pausas)
+├── main.py                    # Interface de terminal (toda a entrada e saída de dados)
+├── calculo.py                 # Lógica matemática pura, sem entrada/saída
+├── historico.py                # Armazenamento do histórico de cálculos
+├── utils.py                   # Funções auxiliares (formatação, pausas)
+├── tests/
+│   ├── test_calculo.py        # Testes das operações e da validação
+│   ├── test_historico.py      # Testes do histórico
+│   └── test_consistencia.py   # Garante que PERGUNTAS bate com a ariedade de cada operação
+├── pytest.ini
 ├── requirements.txt
+├── requirements-dev.txt       # Dependências extras para desenvolvimento (inclui pytest)
+├── LICENSE
 └── README.md
 ```
 
@@ -91,13 +105,12 @@ Resultado: √(16) = 4
 
 ## Melhorias futuras
 
-- [ ] Adicionar testes automatizados (`pytest`)
-- [ ] Integração contínua com GitHub Actions
 - [ ] Persistir histórico em arquivo (JSON) entre execuções
 - [ ] Interface gráfica com Tkinter, reaproveitando a camada de cálculo
 - [x] Separar a lógica de cálculo da interface de usuário
 - [x] Refatorar histórico para evitar estado global
 - [x] Adicionar suporte a mais operações (potência, raiz, porcentagem)
+- [x] Adicionar testes automatizados (`pytest`)
 
 ## Licença
 
