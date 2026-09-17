@@ -4,8 +4,8 @@ Toda a entrada e saída de dados vive aqui. A lógica matemática está em
 cálculo.py e o armazenamento em histórico.py.
 """
 
-from rich.table import Table
 from rich.console import Console
+from rich.table import Table
 
 from calculo import OPERACOES, Operacao, validar_numero
 from historico import Historico
@@ -140,13 +140,13 @@ def confirmar_limpeza() -> bool:
 
 def loop_principal():
     """Controla o fluxo da aplicação."""
-    console.print(('[blue]Vamos calcular[/]\n'))
+    console.print('[blue]Vamos calcular[/]\n')
 
     while True:
         pausa()
         menu()
 
-        opcao = input(('Escolha uma opção: ')).strip()
+        opcao = input('Escolha uma opção: ').strip()
         pausa()
 
         if opcao in OPERACOES:

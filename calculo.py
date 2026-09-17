@@ -2,6 +2,7 @@ import math
 from collections.abc import Callable
 from dataclasses import dataclass
 
+
 def validar_numero(texto: str) -> float:
     """Converte um texto em número, validando o formato."""
     texto = texto.strip()
@@ -19,40 +20,42 @@ def validar_numero(texto: str) -> float:
 
     return valor
 
+
 # --- Operações ---
 
-def somar(a: float, b: float) -> float:
+def somar(parcela1: float, parcela2: float) -> float:
     """Retorna a soma entre dois números."""
-    return a + b
+    return parcela1 + parcela2
 
 
-def subtracao(a: float, b: float) -> float:
-    """Retorna 'a' menos 'b'."""
-    return a - b
+def subtracao(minuendo: float, subtraendo: float) -> float:
+    """Retorna 'minuendo' menos 'subtraendo'."""
+    return minuendo - subtraendo
 
 
-def multiplicacao(a: float, b: float) -> float:
+def multiplicacao(fator1: float, fator2: float) -> float:
     """Retorna a multiplicação entre dois números."""
-    return a * b
+    return fator1 * fator2
 
 
-def divisao(a: float, b: float) -> float:
+def divisao(dividendo: float, divisor: float) -> float:
     """Retorna a divisão entre dois números. Lança ZeroDivisionError se o divisor for zero."""
-    if b == 0:
+    if divisor == 0:
         raise ZeroDivisionError('Não é possível dividir por zero.')
-    return a / b
+    return dividendo / divisor
 
-def potencia(a: float, b: float) -> float:
-    """Retorna 'a' elevado a 'b'.
+
+def potencia(base: float, expoente: float) -> float:
+    """Retorna 'base' elevado a 'expoente'.
 
     Lança ValueError se o resultado não for um número real ou se for
     grande demais para ser representado.
     """
-    if a < 0 and b != int(b):
+    if base < 0 and expoente != int(expoente):
         raise ValueError('Não é possível elevar um número negativo a um expoente fracionário.')
 
     try:
-        resultado = a ** b
+        resultado = base ** expoente
     except OverflowError as erro:
         raise ValueError('O resultado é grande demais para ser calculado.') from erro
 
@@ -62,15 +65,16 @@ def potencia(a: float, b: float) -> float:
     return float(resultado)
 
 
-def raiz_quadrada(a: float) -> float:
-    """Retorna a raiz quadrada de 'a'. Lança ValueError se 'a' for negativo."""
-    if a < 0:
-        raise ValueError('Não é possivel calcular a raiz quadrada de um número negativo.')
-    return math.sqrt(a)
+def raiz_quadrada(numero: float) -> float:
+    """Retorna a raiz quadrada de 'número'. Lança ValueError se 'número' for negativo."""
+    if numero < 0:
+        raise ValueError('Não é possível calcular a raiz quadrada de um número negativo.')
+    return math.sqrt(numero)
 
-def porcentagem(a: float, b: float) -> float:
-    """Calcula quanto é 'a' por cento de 'b'."""
-    return (a / 100) * b
+
+def porcentagem(percentual: float, valor: float) -> float:
+    """Calcula quanto é 'percentual' por cento de 'valor'."""
+    return (percentual / 100) * valor
 
 # --- Catálogo de operações ---
 

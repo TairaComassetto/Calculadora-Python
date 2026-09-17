@@ -11,8 +11,9 @@ def formatar_numero(numero: float) -> int | float:
     O arredondamento evita artefatos de ponto flutuante como
     0.30000000000000004 aparecerem para o usuário.
     """
-    arredondado  = round(numero, CASAS_DECIMAIS)
+    arredondado = round(numero, CASAS_DECIMAIS)
     return int(arredondado) if arredondado == int(arredondado) else arredondado
+
 
 def formatar_operacao(simbolo: str, numeros: tuple[float, ...]) -> str:
     """Monta a representação legível de uma operação (ex: '10 + 5' ou '√(9)')."""

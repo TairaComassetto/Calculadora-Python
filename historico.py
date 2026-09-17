@@ -1,5 +1,6 @@
 from copy import deepcopy
 
+
 class Historico:
     """Armazena e organiza as operações realizadas na calculadora."""
 
