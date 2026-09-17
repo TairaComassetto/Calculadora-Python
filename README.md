@@ -7,7 +7,7 @@ Uma calculadora de terminal (CLI) feita em Python, com interface colorida usando
 - Operações: soma, subtração, multiplicação, divisão, potência, raiz quadrada e porcentagem
 - Tratamento de erros (divisão por zero, raiz de número negativo, entrada inválida, resultado fora de faixa)
 - Cada operação pergunta os números de forma específica, uma pergunta por vez (ex: "Qual é a base?", "E o expoente?")
-- Histórico de todos os cálculos feitos na sessão
+- Histórico de cálculos salvo automaticamente em disco, mantido entre execuções
 - Interface em terminal com tabelas e cores (via `rich`)
 - Encerramento tratado com Ctrl+C, sem exibir erros
 
@@ -49,11 +49,12 @@ pytest -v
 ```
 ├── main.py                    # Interface de terminal (toda a entrada e saída de dados)
 ├── calculo.py                 # Lógica matemática pura, sem entrada/saída
-├── historico.py                # Armazenamento do histórico de cálculos
+├── historico.py                # Armazenamento e persistência do histórico (JSON)
 ├── utils.py                   # Funções auxiliares (formatação, pausas)
+├── historico.json              # Gerado automaticamente; não versionado (está no .gitignore)
 ├── tests/
 │   ├── test_calculo.py        # Testes das operações e da validação
-│   ├── test_historico.py      # Testes do histórico
+│   ├── test_historico.py      # Testes do histórico e da persistência em JSON
 │   └── test_consistencia.py   # Garante que PERGUNTAS bate com a ariedade de cada operação
 ├── pytest.ini
 ├── requirements.txt
@@ -67,6 +68,8 @@ pytest -v
 O projeto separa a lógica da interface. `calculo.py` não lê do teclado nem imprime na tela: recebe números, devolve números e levanta exceções. Quem cuida das perguntas, das mensagens e da apresentação é o `main.py`.
 
 Essa separação facilita testar os cálculos sem simular entrada do usuário, e permite reaproveitar `calculo.py` e `historico.py` numa futura interface gráfica sem alteração alguma.
+
+A persistência do histórico também fica dentro de `historico.py`: a classe `Historico` salva e carrega o `historico.json` sozinha, então qualquer interface que a use (terminal ou, futuramente, GUI) ganha isso automaticamente, sem precisar repetir a lógica de arquivo.
 
 ## Menu
 
@@ -105,12 +108,12 @@ Resultado: √(16) = 4
 
 ## Melhorias futuras
 
-- [ ] Persistir histórico em arquivo (JSON) entre execuções
 - [ ] Interface gráfica com Tkinter, reaproveitando a camada de cálculo
 - [x] Separar a lógica de cálculo da interface de usuário
 - [x] Refatorar histórico para evitar estado global
 - [x] Adicionar suporte a mais operações (potência, raiz, porcentagem)
 - [x] Adicionar testes automatizados (`pytest`)
+- [x] Persistir histórico em arquivo (JSON) entre execuções
 
 ## Licença
 
