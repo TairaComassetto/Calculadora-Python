@@ -16,7 +16,11 @@ __pycache__/
 # Variaveis de ambiente
 .env
 
+# Dados gerados em tempo de execução
+historico.json
+
 # Arquivos do sistema
 .DS_Store
 Thumbs.db
 calculadora.zip
+ .zip
