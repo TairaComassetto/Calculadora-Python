@@ -55,6 +55,7 @@ pytest -v
 ├── tests/
 │   ├── test_calculo.py        # Testes das operações e da validação
 │   ├── test_historico.py      # Testes do histórico e da persistência em JSON
+│   ├── test_utils.py          # Testes das funções de formatação
 │   └── test_consistencia.py   # Garante que PERGUNTAS bate com a ariedade de cada operação
 ├── pytest.ini
 ├── requirements.txt

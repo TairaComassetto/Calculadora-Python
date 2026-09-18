@@ -138,7 +138,7 @@ def confirmar_limpeza() -> bool:
         console.print('[red]Opção inválida! Digite novamente.[/]')
 
 
-def loop_principal():
+def loop_principal() -> None:
     """Controla o fluxo da aplicação."""
     console.print('[blue]Vamos calcular[/]\n')
 

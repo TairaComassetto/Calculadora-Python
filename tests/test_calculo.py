@@ -72,6 +72,11 @@ class TestPotencia:
         assert potencia(9, 0.5) == 3
         assert potencia(5, 0) == 1
 
+    def test_expoente_negativo(self):
+        # Expoente negativo é matematicamente válido (1 / base**|expoente|).
+        assert potencia(2, -1) == 0.5
+        assert potencia(2, -2) == 0.25
+
     def test_base_negativa_com_expoente_inteiro_funciona(self):
         assert potencia(-2, 3) == -8
         assert potencia(-2, 2) == 4
@@ -110,6 +115,16 @@ class TestPorcentagem:
 
     def test_zero_por_cento(self):
         assert porcentagem(0, 500) == 0
+
+    def test_percentual_negativo(self):
+        # percentual negativo é matematicamente válido (ex: um desconto
+        # invertido, ou uma redução expressa como percentual negativo).
+        assert porcentagem(-10, 200) == -20
+
+    def test_percentual_acima_de_cem(self):
+        # 150% de 200 é um valor maior que o próprio 'valor' -- comportamento
+        # esperado, não deveria ser bloqueado.
+        assert porcentagem(150, 200) == 300
 
 
 class TestCatalogoDeOperacoes:
